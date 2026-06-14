@@ -1,6 +1,8 @@
 # Spring Boot CRUD Application
 
 A RESTful CRUD (Create, Read, Update, Delete) application built using Spring Boot. 
+Spring security codes.
+Password encoding security added.
 This project demonstrates the fundamentals of backend development, API creation, request handling, and Maven project management.
 
 ## 🚀 Features
