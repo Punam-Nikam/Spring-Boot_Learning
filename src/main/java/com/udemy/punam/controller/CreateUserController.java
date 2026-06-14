@@ -9,6 +9,7 @@ package com.udemy.punam.controller;
 import com.udemy.punam.model.User;
 import com.udemy.punam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,15 +34,19 @@ public class CreateUserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<User> getUsers() {
         return userRepository.findAll();  //we get all the users
     }    // This creates the get request means in database table is created with column names.(but blank)
     //now we have to create another api that will be responsible to add user in database
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
 
+    @PostMapping("/createUser")
+    public User createUser(@RequestBody User user) {
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);  //add user details from postman and will save to database
     }
     //// we have created two api ,1-getmapping => //we get all the users
