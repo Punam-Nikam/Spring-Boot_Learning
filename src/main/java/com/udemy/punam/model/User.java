@@ -14,6 +14,7 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    //adding more variables for spring security project.
     private String username;
     private String password;
     private String role;
