@@ -4,7 +4,9 @@ import com.udemy.punam.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,20 +20,21 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailService customUserDetailService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
-         csrf(csrf -> csrf.ignoringRequestMatchers("/api/users/createUser"))
-        .authenticationProvider(authenticationProvider())
-                .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/users/createUser").permitAll()
-                        .requestMatchers("/api/users/**").authenticated()
-                                .anyRequest()
-                        .permitAll()
-    ).formLogin(withDefaults())
-                .httpBasic(withDefaults());
 
-    return http.build();
+        http
+                .csrf(csrf -> csrf.disable())
+                .authenticationProvider(authenticationProvider())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/api/users/createUser").permitAll()
+                        .requestMatchers("/api/authenticate").permitAll()
+                        .requestMatchers("/api/users/**").authenticated()
+                        .anyRequest().permitAll()
+                );
+
+        return http.build();
     }
     /////Static credentials
 //    @Bean
@@ -56,5 +59,10 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(customUserDetailService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+    {
+     return authenticationConfiguration.getAuthenticationManager();
     }
 }

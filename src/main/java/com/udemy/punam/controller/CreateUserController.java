@@ -46,7 +46,7 @@ public class CreateUserController {
 
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user) {
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setPassword(passwordEncoder.encode(user.getPassword()));     ///now password will save in database in encoding format
         return userRepository.save(user);  //add user details from postman and will save to database
     }
     //// we have created two api ,1-getmapping => //we get all the users
